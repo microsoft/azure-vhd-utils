@@ -150,7 +150,7 @@ func showVhdHeader(c *cli.Context) error {
 		return errors.New("Missing required argument --path")
 	}
 
-	vFileFactory := &vhdFile.FileFactory{}
+	vFileFactory := &vhdfile.FileFactory{}
 	vFile, err := vFileFactory.Create(vhdPath)
 	if err != nil {
 		return err
@@ -195,7 +195,7 @@ func showVhdFooter(c *cli.Context) error {
 		return errors.New("Missing required argument --path")
 	}
 
-	vFileFactory := &vhdFile.FileFactory{}
+	vFileFactory := &vhdfile.FileFactory{}
 	vFile, err := vFileFactory.Create(vhdPath)
 	if err != nil {
 		return err
@@ -238,7 +238,7 @@ func showVhdBAT(c *cli.Context) error {
 		endRange = uint32(r)
 	}
 
-	vFileFactory := &vhdFile.FileFactory{}
+	vFileFactory := &vhdfile.FileFactory{}
 	vFile, err := vFileFactory.Create(vhdPath)
 	if err != nil {
 		return err
@@ -306,7 +306,7 @@ func showVhdBlocksInfo(c *cli.Context) error {
 		return errors.New("Missing required argument --path")
 	}
 
-	vFileFactory := &vhdFile.FileFactory{}
+	vFileFactory := &vhdfile.FileFactory{}
 	vFile, err := vFileFactory.Create(vhdPath)
 	if err != nil {
 		panic(err)
@@ -365,21 +365,21 @@ func showVhdBlockBitmap(c *cli.Context) error {
 
 	vhdPath := c.String("path")
 	if vhdPath == "" {
-		return errors.New("Missing required argument --path")
+		return errors.New("missing required argument --path")
 	}
 
 	if !c.IsSet("block-index") {
-		return errors.New("Missing required argument --block-index")
+		return errors.New("missing required argument --block-index")
 	}
 
 	blockIndex := uint32(0)
 	id, err := strconv.ParseUint(c.String("block-index"), 10, 32)
 	if err != nil {
-		return fmt.Errorf("invalid index value --block-index: %s\n", err)
+		return fmt.Errorf("invalid index value --block-index: %s", err)
 	}
 	blockIndex = uint32(id)
 
-	vFileFactory := &vhdFile.FileFactory{}
+	vFileFactory := &vhdfile.FileFactory{}
 	vFile, err := vFileFactory.Create(vhdPath)
 	if err != nil {
 		return err
@@ -387,7 +387,7 @@ func showVhdBlockBitmap(c *cli.Context) error {
 	defer vFileFactory.Dispose(nil)
 
 	if vFile.GetDiskType() == footer.DiskTypeFixed {
-		return errors.New("Warn: Only expandable VHDs has bitmap associated with blocks, this is a fixed VHD")
+		return errors.New("warn: only expandable VHDs has bitmap associated with blocks, this is a fixed VHD")
 	}
 
 	vBlockFactory, err := vFile.GetBlockFactory()
@@ -396,7 +396,7 @@ func showVhdBlockBitmap(c *cli.Context) error {
 	}
 
 	if int64(blockIndex) > vBlockFactory.GetBlockCount()-1 {
-		return fmt.Errorf("Warn: given block index %d is out of boundary, block index range is [0 : %d]", blockIndex, vBlockFactory.GetBlockCount()-1)
+		return fmt.Errorf("warn: given block index %d is out of boundary, block index range is [0 : %d]", blockIndex, vBlockFactory.GetBlockCount()-1)
 	}
 
 	vBlock, err := vBlockFactory.Create(blockIndex)

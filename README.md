@@ -8,21 +8,10 @@ An implementation of VHD [VHD specification](https://technet.microsoft.com/en-us
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/Microsoft/azure-vhd-utils)](https://goreportcard.com/report/github.com/Microsoft/azure-vhd-utils)
 
-# Prerequisite
-
-1. You need to have Go runtime installed, you can get the latest stable Go version from [https://golang.org/dl/](https://golang.org/dl/)
-2. The GOPATH environment variable must be defined, which specifices the location of your workspace. Refer [https://golang.org/doc/code.html#GOPATH](https://golang.org/doc/code.html#GOPATH) for the instructions to set GOPATH.
-
 # Installation
+> Note: You must have Go installed on your machine, at version 1.11 or greater. [https://golang.org/dl/](https://golang.org/dl/) 
 
     go get github.com/Microsoft/azure-vhd-utils
-
-This tool has following dependencies. They are included in the vendor directory so no need to `go get` them separately.
-
-    gopkg.in/urfave/cli.v1
-      cli.v1 package is used to expose CLI interface.
-    github.com/Azure/azure-sdk-for-go/storage
-      storage package is used to make Microsoft Azure storage API calls for accessing target container and page blob
 
 # Features
 
@@ -36,7 +25,7 @@ This tool has following dependencies. They are included in the vendor directory 
 
 ```bash
 USAGE:
-   vhd upload [command options] [arguments...]
+   azure-vhd-utils upload [command options] [arguments...]
 
 OPTIONS:
    --localvhdpath       Path to source VHD in the local machine.
@@ -92,7 +81,7 @@ A subset of command are exposed under inspect command for inspecting various seg
 
 ```bash
 USAGE:
-   vhd inspect footer [command options] [arguments...]
+   azure-vhd-utils inspect footer [command options] [arguments...]
 
 OPTIONS:
    --path   Path to VHD.
@@ -102,7 +91,7 @@ OPTIONS:
 
 ```bash
 USAGE:
-   vhd inspect header [command options] [arguments...]
+   azure-vhd-utils inspect header [command options] [arguments...]
 
 OPTIONS:
    --path   Path to VHD.
@@ -114,7 +103,7 @@ Only expandable disks (dynamic and differencing) VHDs has header.
 
 ```bash
 USAGE:
-   vhd inspect bat [command options] [arguments...]
+   azure-vhd-utils inspect bat [command options] [arguments...]
 
 OPTIONS:
    --path           Path to VHD.
@@ -129,7 +118,7 @@ Only expandable disks (dynamic and differencing) VHDs has BAT.
 
 ```bash
 USAGE:
-   vhd inspect block info [command options] [arguments...]
+   azure-vhd-utils inspect block info [command options] [arguments...]
 
 OPTIONS:
    --path   Path to VHD.
@@ -141,7 +130,7 @@ This command shows the total number blocks, block size and size of block sector
 
 ```bash
 USAGE:
-   vhd inspect block bitmap [command options] [arguments...]
+   azure-vhd-utils inspect block bitmap [command options] [arguments...]
 
 OPTIONS:
    --path           Path to VHD.
