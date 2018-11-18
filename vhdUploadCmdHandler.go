@@ -15,7 +15,7 @@ import (
 	"github.com/Microsoft/azure-vhd-utils/vhdcore/common"
 	"github.com/Microsoft/azure-vhd-utils/vhdcore/diskstream"
 	"github.com/Microsoft/azure-vhd-utils/vhdcore/validator"
-	"gopkg.in/urfave/cli.v1"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 func vhdUploadCmdHandler() cli.Command {
@@ -23,6 +23,10 @@ func vhdUploadCmdHandler() cli.Command {
 		Name:  "upload",
 		Usage: "Upload a local VHD to Azure storage as page blob",
 		Flags: []cli.Flag{
+			cli.StringFlag{
+				Name:  "baseurl",
+				Usage: "Base URL for storage endpoint",
+			},
 			cli.StringFlag{
 				Name:  "localvhdpath",
 				Usage: "Path to source VHD in the local machine.",
@@ -54,6 +58,11 @@ func vhdUploadCmdHandler() cli.Command {
 		},
 		Action: func(c *cli.Context) error {
 			const PageBlobPageSize int64 = 2 * 1024 * 1024
+
+			baseURL := c.String("baseurl")
+			if baseURL == "" {
+				baseURL = storage.DefaultBaseURL
+			}
 
 			localVHDPath := c.String("localvhdpath")
 			if localVHDPath == "" {
@@ -106,7 +115,7 @@ func vhdUploadCmdHandler() cli.Command {
 			}
 			defer diskStream.Close()
 
-			storageClient, err := storage.NewBasicClient(stgAccountName, stgAccountKey)
+			storageClient, err := storage.NewClient(stgAccountName, stgAccountKey, baseURL, storage.DefaultAPIVersion, true)
 			if err != nil {
 				return err
 			}
