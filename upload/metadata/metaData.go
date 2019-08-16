@@ -134,7 +134,7 @@ func CompareMetaData(remote, local *MetaData) []error {
 				remote.FileMetaData.FileSize, local.FileMetaData.FileSize))
 	}
 
-	if remote.FileMetaData.LastModifiedTime != local.FileMetaData.LastModifiedTime {
+	if !remote.FileMetaData.LastModifiedTime.Equal(local.FileMetaData.LastModifiedTime) {
 		metadataErrors = append(metadataErrors,
 			fmt.Errorf("Last modified time of the VHD file in Azure blob storage (%v) and local VHD file (%v) does not match",
 				remote.FileMetaData.LastModifiedTime, local.FileMetaData.LastModifiedTime))
