@@ -92,11 +92,11 @@ func NewMetaDataFromLocalVHD(vhdPath string) (*MetaData, error) {
 // MetaData associated with the blob it returns nil value for MetaData
 //
 func NewMetadataFromBlob(blobClient storage.BlobStorageClient, containerName, blobName string) (*MetaData, error) {
-	allMetadata, err := blobClient.GetBlobMetadata(containerName, blobName)
-	if err != nil {
+	blob := blobClient.GetContainerReference(containerName).GetBlobReference(blobName)
+	if err := blob.GetMetadata(nil); err != nil {
 		return nil, fmt.Errorf("NewMetadataFromBlob, failed to fetch blob metadata: %v", err)
 	}
-	m, ok := allMetadata[metaDataKey]
+	m, ok := blob.Metadata[metaDataKey]
 	if !ok {
 		return nil, nil
 	}

@@ -1,6 +1,7 @@
 package upload
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -86,13 +87,13 @@ L:
 			//
 			req := &concurrent.Request{
 				Work: func() error {
-					err := cxt.BlobServiceClient.PutPage(cxt.ContainerName,
-						cxt.BlobName,
-						dataWithRange.Range.Start,
-						dataWithRange.Range.End,
-						storage.PageWriteTypeUpdate,
-						dataWithRange.Data,
-						nil)
+					container := cxt.BlobServiceClient.GetContainerReference(cxt.ContainerName)
+					blob := container.GetBlobReference(cxt.BlobName)
+
+					err := blob.WriteRange(storage.BlobRange{
+						Start: uint64(dataWithRange.Range.Start),
+						End:   uint64(dataWithRange.Range.End),
+					}, bytes.NewReader(dataWithRange.Data), nil)
 					if err == nil {
 						uploadProgress.ReportBytesProcessedCount(dataWithRange.Range.Length())
 					}
