@@ -31,6 +31,7 @@ OPTIONS:
    --localvhdpath       Path to source VHD in the local machine.
    --stgaccountname     Azure storage account name.
    --stgaccountkey      Azure storage account key.
+   --stgaccountkeyfile  Path to file containing Azure storage account key.
    --containername      Name of the container holding destination page blob. (Default: vhds)
    --blobname           Name of the destination page blob.
    --parallelism        Number of concurrent goroutines to be used for upload

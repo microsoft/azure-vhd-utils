@@ -4,7 +4,9 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
@@ -34,6 +36,10 @@ func vhdUploadCmdHandler() cli.Command {
 			cli.StringFlag{
 				Name:  "stgaccountkey",
 				Usage: "Azure storage account key.",
+			},
+			cli.StringFlag{
+				Name:  "stgaccountkeyfile",
+				Usage: "Path to file containing Azure storage account key.",
 			},
 			cli.StringFlag{
 				Name:  "containername",
@@ -66,8 +72,18 @@ func vhdUploadCmdHandler() cli.Command {
 			}
 
 			stgAccountKey := c.String("stgaccountkey")
-			if stgAccountKey == "" {
-				return errors.New("Missing required argument --stgaccountkey")
+			stgAccountKeyFile := c.String("stgaccountkeyfile")
+			if stgAccountKey == "" && stgAccountKeyFile == "" {
+				return errors.New("Missing required argument (either --stgaccountkey or --stgaccountkeyfile is needed)")
+			}
+			if stgAccountKey == "" && stgAccountKeyFile != "" {
+				input, err := ioutil.ReadFile(stgAccountKeyFile)
+				if err != nil {
+					return fmt.Errorf("error reading from stgaccountkeyfile %s: %s", stgAccountKeyFile, err)
+				}
+				stgAccountKey = string(input)
+				re := regexp.MustCompile(`\r?\n`)
+				stgAccountKey = re.ReplaceAllString(stgAccountKey, "")
 			}
 
 			containerName := c.String("containername")
