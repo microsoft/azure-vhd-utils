@@ -1,4 +1,4 @@
-rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
+rwildcard=$(foreach d,$(filter-out ..,$(wildcard $1*)),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 
 .PHONY: all
 all: test azure-vhd-utils lint fmt
